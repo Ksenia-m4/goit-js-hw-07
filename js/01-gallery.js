@@ -32,7 +32,7 @@ function makeMarkup(arr) {
 
 container.insertAdjacentHTML("beforeend", makeMarkup(galleryItems));
 
-container.addEventListener("click", onClick);
+let instance;
 
 function onClick(event) {
   event.preventDefault();
@@ -40,33 +40,31 @@ function onClick(event) {
     return;
   }
 
-  const item = event.target.alt;
+  const imgDescription = event.target.alt;
 
-  onOpenModal(item);
-}
-
-function onOpenModal(item) {
   const currentItem = galleryItems.find(
-    ({ description }) => description === item
+    ({ description }) => description === imgDescription
   );
 
-  const instance = basicLightbox.create(
+  instance = basicLightbox.create(
     `<img width="1400" height="900" src="${currentItem.original}">`,
     {
+      onShow: () => {
+        document.body.addEventListener("keydown", onEscapePress);
+      },
       onClose: () => {
         document.body.removeEventListener("keydown", onEscapePress);
       },
     }
   );
   instance.show();
+}
 
-  document.body.addEventListener("keydown", onEscapePress);
-
-  function onEscapePress(evt) {
-    const visible = basicLightbox.visible();
-    if (evt.code === "Escape" && visible) {
-      instance.close();
-      console.log(evt.code);
-    }
+function onEscapePress(evt) {
+  if (evt.code === "Escape" && basicLightbox.visible()) {
+    instance.close();
+    console.log(evt.code);
   }
 }
+
+container.addEventListener("click", onClick);
