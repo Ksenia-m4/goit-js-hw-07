@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "keywords": [],
+  "author": "Kseniia Machnieva",
   "license": "ISC",
   "dependencies": {
     "joi": "^17.13.3"
